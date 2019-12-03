@@ -4,13 +4,25 @@
 void UBullCowCartridge::BeginPlay() // When the game starts
 {
     Super::BeginPlay();
-    PrintLine("Thank you for playing Bull Cows");
-    PrintLine("Please enter the length of the word you wish to guess?");
+    PrintLine(TEXT("Thank you for playing Bull Cows"));
+    PrintLine(TEXT("Guess the 4 letter word")); // Magic number REMOVE!
+
 }
 
 void UBullCowCartridge::OnInput(const FString& Input) // When the player hits enter
 {
     ClearScreen();
-    FString HiddenWord = "police";
-    FString Isogram = "oilpce";
+    FString HiddenWord = TEXT("cake"); // Move outside this function
+    if (Input == HiddenWord)
+    {
+        PrintLine(TEXT("You won!"));
+    }
+    else
+    {
+        PrintLine(TEXT("You lost"));
+    }
+    
+    
+    FString Isogram = TEXT("oilpce");
+    PrintLine(Input);
 }
