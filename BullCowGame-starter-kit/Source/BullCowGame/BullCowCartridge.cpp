@@ -123,21 +123,15 @@ void UBullCowCartridge::ProcessGuess(FString Guess)
 
 bool UBullCowCartridge::IsIsogram(FString word)
 {
-    bool Isogram = true;
     for (int32 i = 0; i < word.Len(); i++)
     {
         for (int32 j = i+1; j < word.Len(); j++)
         {
             if (word[i] == word[j])
             {
-                Isogram = false;
-                return Isogram;
+                return false;
             }
         }
-        if (!Isogram)
-        {
-            return Isogram;
-        }
     }
-    return Isogram;
+    return true;
 }
