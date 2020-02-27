@@ -19,6 +19,10 @@ class BULLCOWGAME_API UBullCowCartridge : public UCartridge
 	virtual void OnInput(const FString& Input) override;
 	void PrintPreviousGuesses();
 	void SetupGame();
+	void EndGame();
+	int32 CheckForBulls(FString Guess);
+	void ProcessGuess(FString Guess);
+	bool IsIsogram(FString word);
 
 	const std::vector<FString> Passwords = 
 	{
