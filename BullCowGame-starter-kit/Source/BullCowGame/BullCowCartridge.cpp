@@ -1,56 +1,75 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "BullCowCartridge.h"
 
+FString HiddenWord;
+bool bGameOver;
+int Lives;
+FString Isogram;
+
 void UBullCowCartridge::BeginPlay() // When the game starts
 {
+    bGameOver = false;
+    Lives = 4;
     Super::BeginPlay();
-
     SetupGame();
-
     PrintLine(FString::Printf(TEXT("The Hidden Word is : %s"), *HiddenWord)); //Debug Line
-
-    PrintLine(TEXT("Thank you for playing Bull Cows"));
-    PrintLine(TEXT("Guess the 4 letter word")); // Magic number REMOVE!
-    
-
-    
-    // Set lives
-
-    // Prompt player for guess
 }
 
 void UBullCowCartridge::OnInput(const FString& Input) // When the player hits enter
 {
     ClearScreen();
-    
-    if (Input.Len() != HiddenWord.Len())
+
+    if (bGameOver == true)
     {
-        PrintLine(TEXT("Wrong number of letters entered. Make sure you have 4 letters")); // Magic Number
+        bGameOver = false;
+        SetupGame();
     }
-    // Check if isogram
-    // 
-    
-    
-    FString HiddenWord = TEXT("cake"); // Move outside this function
-    if (Input == HiddenWord)
+    else //Not Game Over
     {
-        PrintLine(TEXT("You won!"));
-    }
-    else
-    {
-        // Remove a life
-        // if still alive
-        PrintLine(TEXT("You lost"));
-        PrintLine(TEXT("The hidden word was : cake")); // Magic Word
+        if (Input.Len() != HiddenWord.Len())
+        {
+            PrintLine(TEXT("Wrong number of letters entered. Make sure you have 4 letters")); // Magic Number
+        }
+        else //Right number of letters
+        {
+            if (Input == HiddenWord)
+            {
+                PrintLine(TEXT("You won!"));
+                bGameOver = true;
+            }
+            else // Not the right word
+            {
+                // Remove a life
+                Lives --;
+                // if still alive
+                if (Lives == 0)
+                {
+                    PrintLine(TEXT("You lost"));
+                    PrintLine(TEXT("The hidden word was : " + HiddenWord));
+                }
+                else //if still has lives left
+                {
+                    PrintLine(TEXT("WRONG! %i lives left!"), Lives);
+                }
+                PrintLine(TEXT("You wrote : " + Input));
+            }
+        }
     }
     
     
-    FString Isogram = TEXT("oilpce");
-    PrintLine(Input);
+    
+    
+    
+    
+    
+    
+    
 }
 
 void UBullCowCartridge::SetupGame()
 {
+    // Prompt player for guess
+    PrintLine(TEXT("Thank you for playing Bull Cows"));
     HiddenWord = TEXT("cake");
-    Lives = 4;
+    PrintLine(TEXT("Guess the %i letter word"), HiddenWord.Len());
 }
