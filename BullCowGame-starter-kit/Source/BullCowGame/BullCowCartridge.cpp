@@ -1,15 +1,18 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "BullCowCartridge.h"
+#include <vector>
+#include <stdlib.h> 
 
 FString HiddenWord;
 bool bGameOver;
 int Lives;
 FString Isogram;
+std::vector<FString> Guesses;
 
 void UBullCowCartridge::BeginPlay() // When the game starts
 {
     bGameOver = false;
-    Lives = 4;
+    Guesses = {};
     Super::BeginPlay();
     SetupGame();
     PrintLine(FString::Printf(TEXT("The Hidden Word is : %s"), *HiddenWord)); //Debug Line
@@ -29,6 +32,7 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
         if (Input.Len() != HiddenWord.Len())
         {
             PrintLine(TEXT("Wrong number of letters entered. Make sure you have 4 letters")); // Magic Number
+            PrintPreviousGuesses();
         }
         else //Right number of letters
         {
@@ -41,35 +45,42 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
             {
                 // Remove a life
                 Lives --;
-                // if still alive
+                // if lost
                 if (Lives == 0)
                 {
+                    bGameOver = true;
                     PrintLine(TEXT("You lost"));
                     PrintLine(TEXT("The hidden word was : " + HiddenWord));
                 }
                 else //if still has lives left
                 {
+                    Guesses.push_back(Input);
                     PrintLine(TEXT("WRONG! %i lives left!"), Lives);
+                    PrintPreviousGuesses();
                 }
-                PrintLine(TEXT("You wrote : " + Input));
             }
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
+}
+
+void UBullCowCartridge::PrintPreviousGuesses()
+{
+    if (Guesses.size() != 0)
+    {
+        PrintLine(TEXT("You guessed : "));
+        for (int i = 0; i < Guesses.size(); i++)
+        {
+            PrintLine(Guesses[i]);
+        }
+    }
 }
 
 void UBullCowCartridge::SetupGame()
 {
     // Prompt player for guess
     PrintLine(TEXT("Thank you for playing Bull Cows"));
-    HiddenWord = TEXT("cake");
+    int randomNumber = rand () % Passwords.size();
+    HiddenWord = Passwords[randomNumber];
     PrintLine(TEXT("Guess the %i letter word"), HiddenWord.Len());
+    Lives = 4;
 }
